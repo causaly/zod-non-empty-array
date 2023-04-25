@@ -1,6 +1,6 @@
 {
   "name": "@causaly/zod-non-empty-array",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Typescript package template",
   "keywords": [
     "typescript",
