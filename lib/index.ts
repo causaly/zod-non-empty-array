@@ -1,1 +1,2 @@
-export { sum } from './sum';
+export { transformNonEmptyArray } from './transformNonEmptyArray';
+export { transformReadonlyNonEmptyArray } from './transformReadonlyNonEmptyArray';
