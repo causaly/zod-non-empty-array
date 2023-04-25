@@ -22,7 +22,7 @@ describe('transformReadonlyNonEmptyArray()', () => {
     });
   });
 
-  test('transforms non-empty array to fp-ts NonEmptyArray type', async () => {
+  test('transforms non-empty array to fp-ts ReadonlyNonEmptyArray type', async () => {
     const addIssue = jest.fn();
     const ctx: zod.RefinementCtx = {
       addIssue,
