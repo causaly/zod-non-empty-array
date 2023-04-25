@@ -1,5 +1,5 @@
 {
-  "name": "@causaly/typescript-pkg-template",
+  "name": "@causaly/zod-non-empty-array",
   "version": "0.0.0",
   "description": "Typescript package template",
   "keywords": [
@@ -10,12 +10,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/causaly/typescript-pkg-template.git"
+    "url": "git://github.com/causaly/zod-non-empty-array.git"
   },
   "author": {
-    "name": "Causaly Team",
-    "email": "front-end@causaly.com",
-    "url": "https://www.causaly.com"
+    "name": "Dimitrios C. Michalakos",
+    "email": "dimitris@jmike.gr",
+    "url": "https://github.com/jmike"
   },
   "private": true,
   "sideEffects": false,
@@ -68,7 +68,12 @@
     "lint-staged": "^13.2.1",
     "prettier": "^2.2.1",
     "rimraf": "^5.0.0",
+    "ts-expect": "^1.3.0",
     "ts-jest": "^29.0.3",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "fp-ts": "^2.14.0",
+    "zod": "^3.21.4"
   }
 }
