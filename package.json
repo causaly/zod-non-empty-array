@@ -1,0 +1,74 @@
+{
+  "name": "@causaly/typescript-pkg-template",
+  "version": "0.0.0",
+  "description": "Typescript package template",
+  "keywords": [
+    "typescript",
+    "template",
+    "module"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/causaly/typescript-pkg-template.git"
+  },
+  "author": {
+    "name": "Causaly Team",
+    "email": "front-end@causaly.com",
+    "url": "https://www.causaly.com"
+  },
+  "private": true,
+  "sideEffects": false,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build:cjs": "tsc -p ./tsconfig.build-cjs.json",
+    "build:esm": "tsc -p ./tsconfig.build-esm.json",
+    "build:types": "tsc -p ./tsconfig.build-types.json",
+    "build": "rimraf dist && concurrently \"npm run build:types\" \"npm run build:esm\" \"npm run build:cjs\"",
+    "lint": "eslint lib --ext .ts",
+    "format": "prettier --config ./.prettierrc --ignore-path .gitignore -w .",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "changeset": "changeset",
+    "prerelease": "npm run build && npm run test",
+    "release": "changeset publish",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --config ./.prettierrc --write"
+    ]
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.4.2",
+    "@changesets/cli": "^2.18.1",
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "@types/jest": "^29.2.4",
+    "@types/node": "^18.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "concurrently": "^8.0.1",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "husky": "^8.0.3",
+    "jest": "^29.3.1",
+    "lint-staged": "^13.2.1",
+    "prettier": "^2.2.1",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.0.3",
+    "typescript": "^5.0.4"
+  }
+}
