@@ -52,7 +52,7 @@ Zod already supports [non-empty array validation](https://zod.dev/?id=nonempty).
 Specifically, fp-ts defines `NonEmptyArray` as follows...
 
 ```typescript
-interface NonEmptyArrayAlt<T> extends Array<T> {
+interface NonEmptyArray<T> extends Array<T> {
   0: T;
 }
 ```
