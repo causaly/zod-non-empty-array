@@ -1,11 +1,12 @@
 {
-  "name": "@causaly/zod-non-empty-array",
+  "name": "zod-non-empty-array",
   "version": "0.1.0",
-  "description": "Typescript package template",
+  "description": "Make zod compatible with fp-ts non-empty constructs.",
   "keywords": [
-    "typescript",
-    "template",
-    "module"
+    "zod",
+    "fp-ts",
+    "non-empty",
+    "array"
   ],
   "license": "MIT",
   "repository": {
