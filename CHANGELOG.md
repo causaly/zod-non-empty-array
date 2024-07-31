@@ -1,5 +1,11 @@
 # @causaly/zod-non-empty-array
 
+## 0.2.1
+
+### Patch Changes
+
+- 8e83d7c: Ensure changeset releases are working
+
 ## 0.2.0
 
 ### Minor Changes
