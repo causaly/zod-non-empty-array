@@ -1,6 +1,6 @@
 {
   "name": "zod-non-empty-array",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Make zod compatible with fp-ts non-empty constructs.",
   "keywords": [
     "zod",
