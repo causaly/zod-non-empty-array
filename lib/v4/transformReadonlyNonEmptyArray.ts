@@ -1,6 +1,6 @@
-import { identity, pipe } from 'fp-ts/lib/function';
-import * as Option from 'fp-ts/Option';
-import * as ReadonlyNonEmptyArray from 'fp-ts/ReadonlyNonEmptyArray';
+import { identity, pipe } from 'fp-ts/lib/function.js';
+import * as Option from 'fp-ts/lib/Option.js';
+import * as ReadonlyNonEmptyArray from 'fp-ts/lib/ReadonlyNonEmptyArray.js';
 import * as zod from 'zod';
 
 export function transformReadonlyNonEmptyArray<T>(
@@ -12,7 +12,7 @@ export function transformReadonlyNonEmptyArray<T>(
     ReadonlyNonEmptyArray.fromReadonlyArray,
     Option.match(() => {
       ctx.addIssue({
-        code: zod.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Array must not be empty',
         fatal: true,
       });

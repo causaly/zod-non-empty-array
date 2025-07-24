@@ -22,63 +22,73 @@
     "access": "public"
   },
   "sideEffects": false,
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./v4/index.js",
+  "module": "./v4/index.mjs",
+  "types": "./v4/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./v4/index.d.ts",
+      "require": "./v4/index.js",
+      "import": "./v4/index.mjs"
+    },
+    "./v3": {
+      "types": "./v3/index.d.ts",
+      "require": "./v3/index.js",
+      "import": "./v3/index.mjs"
+    },
+    "./v4": {
+      "types": "./v4/index.d.ts",
+      "require": "./v4/index.js",
+      "import": "./v4/index.mjs"
+    }
+  },
   "files": [
-    "dist"
+    "v3",
+    "v4"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build:cjs": "tsc -p ./tsconfig.build-cjs.json",
-    "build:esm": "tsc -p ./tsconfig.build-esm.json",
-    "build:types": "tsc -p ./tsconfig.build-types.json",
-    "build": "rimraf dist && concurrently \"npm run build:types\" \"npm run build:esm\" \"npm run build:cjs\"",
-    "lint": "eslint lib --ext .ts",
-    "format": "prettier --config ./.prettierrc --ignore-path .gitignore -w .",
-    "test": "jest",
-    "coverage": "jest --coverage",
+    "build": "tsup --config ./tsup.config.ts",
+    "lint": "eslint --config ./eslint.config.mjs .",
+    "format": "prettier --config ./.prettierrc.json --ignore-path .gitignore -w .",
+    "test": "vitest run",
     "changeset": "changeset",
     "prerelease": "npm run build && npm run test",
     "release": "changeset publish",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "prettier --config ./.prettierrc --write"
+      "prettier --config ./.prettierrc.json --write"
     ]
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.2",
-    "@changesets/cli": "^2.24.4",
-    "@commitlint/cli": "^17.6.1",
-    "@commitlint/config-conventional": "^17.6.1",
-    "@types/jest": "^29.2.4",
-    "@types/node": "^18.11.13",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "concurrently": "^8.0.1",
-    "eslint": "^8.4.1",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
-    "husky": "^8.0.3",
-    "jest": "^29.3.1",
-    "lint-staged": "^13.2.1",
-    "prettier": "^2.2.1",
-    "rimraf": "^5.0.0",
-    "ts-expect": "^1.3.0",
-    "ts-jest": "^29.0.3",
-    "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "fp-ts": "^2.14.0"
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.5",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.31.0",
+    "eslint-plugin-import": "^2.32.0",
+    "fp-ts": "^2.16.10",
+    "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4",
+    "zod": "^4.0.8"
   },
   "peerDependencies": {
-    "zod": "^3.23.8"
+    "fp-ts": "^2.16.0",
+    "zod": "^3.25.0 || ^4.0.0"
   }
 }
