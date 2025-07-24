@@ -6,6 +6,7 @@ on:
 
 jobs:
   block-autosquash:
+    # bypass the action if the PR is a draft
     if: github.event.pull_request.draft == false
     name: block-autosquash
     runs-on: ubuntu-latest
@@ -16,61 +17,88 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
+    # bypass the action if the PR is a draft
     if: github.event.pull_request.draft == false
     name: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - uses: actions/cache@v4
         id: npm-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json', '.nvmrc') }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
+        id: dist
         with:
-          path: '**/build'
-          key: ${{ runner.os }}-build-${{ github.sha }}
+          path: |
+            './v3'
+            './v4'
+          key: ${{ runner.os }}-dist-${{ github.sha }}
 
       - name: Install dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
 
-      - name: Build artifacts
+      - name: Build dist files
         run: npm run build
 
-  test_unit:
+  test-unit:
     name: test:unit
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json', '.nvmrc') }}
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            './v3'
+            './v4'
+          key: ${{ runner.os }}-dist-${{ github.sha }}
+
+      - name: Run tests
+        run: npm run test
+
+  test-deno:
     needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
-
+        deno: ['v1.x', 'v2.x']
+    name: test:deno(${{ matrix.deno }})
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v4
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: npm-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json', '.nvmrc') }}
 
-      - uses: actions/cache@v2
+      - uses: denoland/setup-deno@v1
         with:
-          path: '**/build'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-
-      - name: Run tests
-        run: npm run test
+          deno-version: ${{ matrix.deno }}
+      - run: deno --version
+      - run: deno run ./v3/index.ts
+        working-directory: ./lib
+      - run: deno run ./v4/index.ts
+        working-directory: ./lib

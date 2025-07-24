@@ -1,36 +1,39 @@
-import * as ReadonlyNonEmptyArray from 'fp-ts/ReadonlyNonEmptyArray';
-import { expectType } from 'ts-expect';
 import * as zod from 'zod';
 
-import { transformReadonlyNonEmptyArray } from './transformReadonlyNonEmptyArray';
+import { transformNonEmptyArray } from './transformNonEmptyArray.ts';
+import type * as NonEmptyArray from 'fp-ts/lib/NonEmptyArray.js';
 
-describe('transformReadonlyNonEmptyArray()', () => {
+describe('transformNonEmptyArray()', () => {
   test('adds issue to refinement context when array is empty', async () => {
-    const addIssue = jest.fn();
+    const addIssue = vi.fn();
+    const value: Array<string> = [];
     const ctx: zod.RefinementCtx = {
+      value,
+      issues: [],
       addIssue,
-      path: [''],
     };
 
-    transformReadonlyNonEmptyArray([], ctx);
+    transformNonEmptyArray(value, ctx);
 
     expect(addIssue).toHaveBeenCalledTimes(1);
     expect(addIssue.mock.calls[0][0]).toEqual({
-      code: zod.ZodIssueCode.custom,
+      code: 'custom',
       message: 'Array must not be empty',
       fatal: true,
     });
   });
 
-  test('transforms non-empty array to fp-ts ReadonlyNonEmptyArray type', async () => {
-    const addIssue = jest.fn();
+  test('transforms non-empty array to fp-ts NonEmptyArray type', async () => {
+    const addIssue = vi.fn();
+    const value = [1, 2, 3];
     const ctx: zod.RefinementCtx = {
+      value,
+      issues: [],
       addIssue,
-      path: [''],
     };
 
-    const expected = transformReadonlyNonEmptyArray([1, 2, 3], ctx);
-    expectType<ReadonlyNonEmptyArray.ReadonlyNonEmptyArray<number>>(expected);
+    const expected = transformNonEmptyArray(value, ctx);
+    expectTypeOf<NonEmptyArray.NonEmptyArray<number>>(expected);
 
     expect(addIssue).toHaveBeenCalledTimes(0);
   });
@@ -39,9 +42,7 @@ describe('transformReadonlyNonEmptyArray()', () => {
     const schema = zod.object({
       id: zod.number().int().positive(),
       title: zod.string(),
-      authors: zod
-        .array(zod.string())
-        .transform(transformReadonlyNonEmptyArray),
+      authors: zod.array(zod.string()).transform(transformNonEmptyArray),
     });
 
     type Article = zod.infer<typeof schema>;
@@ -53,7 +54,7 @@ describe('transformReadonlyNonEmptyArray()', () => {
     };
     const expected = schema.parse(input);
 
-    expectType<Article>(expected);
+    expectTypeOf<Article>(expected);
     expect(expected).toEqual(input);
   });
 });

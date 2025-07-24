@@ -1,12 +1,11 @@
-import * as NonEmptyArray from 'fp-ts/NonEmptyArray';
-import { expectType } from 'ts-expect';
-import * as zod from 'zod';
+import * as zod from 'zod/v3';
 
-import { transformNonEmptyArray } from './transformNonEmptyArray';
+import { transformNonEmptyArray } from './transformNonEmptyArray.ts';
+import type * as NonEmptyArray from 'fp-ts/lib/NonEmptyArray.js';
 
 describe('transformNonEmptyArray()', () => {
   test('adds issue to refinement context when array is empty', async () => {
-    const addIssue = jest.fn();
+    const addIssue = vi.fn();
     const ctx: zod.RefinementCtx = {
       addIssue,
       path: [''],
@@ -23,14 +22,14 @@ describe('transformNonEmptyArray()', () => {
   });
 
   test('transforms non-empty array to fp-ts NonEmptyArray type', async () => {
-    const addIssue = jest.fn();
+    const addIssue = vi.fn();
     const ctx: zod.RefinementCtx = {
       addIssue,
       path: [''],
     };
 
     const expected = transformNonEmptyArray([1, 2, 3], ctx);
-    expectType<NonEmptyArray.NonEmptyArray<number>>(expected);
+    expectTypeOf<NonEmptyArray.NonEmptyArray<number>>(expected);
 
     expect(addIssue).toHaveBeenCalledTimes(0);
   });
@@ -51,7 +50,7 @@ describe('transformNonEmptyArray()', () => {
     };
     const expected = schema.parse(input);
 
-    expectType<Article>(expected);
+    expectTypeOf<Article>(expected);
     expect(expected).toEqual(input);
   });
 });
