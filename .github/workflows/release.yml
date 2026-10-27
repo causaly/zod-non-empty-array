@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
+          check-latest: true
 
       - name: Install Dependencies
         run: npm ci
